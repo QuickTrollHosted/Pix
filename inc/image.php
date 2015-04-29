@@ -37,21 +37,21 @@ if (isset($img) && file_exists(ORIGINAL . $img)) {
                 <a class="edit" href="?action=edit&img=<?= $img ?>"><img src="images/edit.png" /></a>
                 <a class="delete" href="?action=delete&img=<?= $img ?>"><img src="images/delete.png" /></a>
             </span>
-        <? } ?>
-        <? if ($image) { ?>
-            <span class="author">Image envoy&eacute;e le <? echo $image->getDate(); ?>
-            <? if ($image->getUser()) { ?>
+        <?php } ?>
+        <?php if ($image) { ?>
+            <span class="author">Image envoy&eacute;e le <?php echo $image->getDate(); ?>
+            <?php if ($image->getUser()) { ?>
                 par <a href="?action=search&method=author&author=<?echo $image->getUser(); ?>"><?echo $image->getUser(); ?></a>
-            <? } ?>
+            <?php } ?>
             </span>
-            <span class="metadata"><? echo $image->getWidth() . ' x ' . $image->getHeight(); ?> - <? echo Image::getHumanSize($image->getSize()); ?></span>
+            <span class="metadata"><?php echo $image->getWidth() . ' x ' . $image->getHeight(); ?> - <?php echo Image::getHumanSize($image->getSize()); ?></span>
             <span class="description"><?echo $image->getDescription(); ?></span>
             <span class="tags">
-            <? foreach ($image->getTags() as $tag) { ?>
+            <?php foreach ($image->getTags() as $tag) { ?>
                 <a href="?action=search&method=tag&tag=<?echo $tag; ?>"><?echo $tag; ?></a>
-            <? } ?>
+            <?php } ?>
             </span>
-        <? } ?>
+        <?php } ?>
     </div>
 
     <table class="info">
@@ -62,37 +62,37 @@ if (isset($img) && file_exists(ORIGINAL . $img)) {
         <tr>
             <td>Afficher l'image : </td>
             <td>
-                <textarea><? echo $config['url']; ?>?img=<? echo $img; ?></textarea>
+                <textarea><?php echo $config['url']; ?>?img=<?php echo $img; ?></textarea>
             </td>
         </tr>
         <tr>
             <td>Acc&eacute;der &agrave; l'image : </td>
             <td>
-                <textarea><? echo $config['url'] . $original; ?></textarea>
+                <textarea><?php echo $config['url'] . $original; ?></textarea>
             </td>
         </tr>
         <tr>
             <td>Ins&eacute;rer la miniature dans un forum : </td>
             <td>
-                <textarea>[url=<? echo $config['url']; ?>?img=<? echo $img; ?>][img]<? echo $config['url'] . $thumb; ?>[/img][/url]</textarea>
+                <textarea>[url=<?php echo $config['url']; ?>?img=<?php echo $img; ?>][img]<?php echo $config['url'] . $thumb; ?>[/img][/url]</textarea>
             </td>
         </tr>
         <tr>
             <td>Ins&eacute;rer l'image dans un forum : </td>
             <td>
-                <textarea>[url=<? echo $config['url']; ?>?img=<? echo $img; ?>][img]<? echo $config['url'] . $resized; ?>[/img][/url]</textarea>
+                <textarea>[url=<?php echo $config['url']; ?>?img=<?php echo $img; ?>][img]<?php echo $config['url'] . $resized; ?>[/img][/url]</textarea>
             </td>
         </tr>
         <tr>
             <td>Ins&eacute;rer la miniature &agrave; votre site : </td>
             <td>
-                <textarea><a href='<? echo $config['url']; ?>?img=<? echo $img; ?>'><img src='<? echo $config['url'] . $thumb; ?>' /></a></textarea>
+                <textarea><a href='<?php echo $config['url']; ?>?img=<?php echo $img; ?>'><img src='<?php echo $config['url'] . $thumb; ?>' /></a></textarea>
             </td>
         </tr>
         <tr>
             <td>Ins&eacute;rer l'image &agrave; votre site : </td>
             <td>
-                <textarea><a href='<? echo $config['url']; ?>?img=<? echo $img; ?>'><img src='<? echo $config['url'] . $resized; ?>' /></a></textarea>
+                <textarea><a href='<?php echo $config['url']; ?>?img=<?php echo $img; ?>'><img src='<?php echo $config['url'] . $resized; ?>' /></a></textarea>
             </td>
         </tr>
     </table>
