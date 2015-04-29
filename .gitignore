@@ -1,0 +1,11 @@
+/config.php
+/upload/*
+/upload/img/*
+/upload/original/*
+
+/cron.last
+/totalsize
+
+/pix-1.*.tar.gz
+
+/favicon.ico
