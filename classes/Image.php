@@ -86,37 +86,53 @@ class Image {
             }
             return false;
         }
+		
+		// format tags
+		$this->_tags = $tags;
+		$this->_formatTags();
 
-        // build new name based on timestamp
-        $this->_name = time() . $this->_extension;
+		// description
+		$this->_description = htmlspecialchars($description);
 
-        // complete upload: move file to target dir
-        if (!move_uploaded_file($file["tmp_name"], ORIGINAL . $this->_name)) {
-            $this->error = "Echec de l'upload !";
-            return false;
-        }
+		// access
+		$this->_public = !$private + 0;
 
-        // build resized image
-        $this->_resize(RESIZE, $config['width'], $config['height']);
-        $this->_resize(THUMB, $config['width_thumb'], $config['height_thumb']);
+		// author
+		$this->_user = $_SESSION['pseudo'];
 
+		$query = "INSERT INTO uploads (user, description, tags, public) VALUES ('" . $sql->escape($this->_user) . "', '" . $sql->escape($this->_description) . "', '" . $sql->escape($this->_tags) . "', " . $this->_public . ")";
+		
+		if ( !$sql->execute($query) || !is_numeric(mysql_insert_id())) {
+			$this->error = "Echec lors de l'enregistrement de votre image en base, veuillez retenter.";
+			return false;
+		}
+			
+		if(!$this->_public) {
+			// build new name based on timestamp
+			$this->_name = rand() . time() . $this->_extension;
+		} else {
+			// get id image
+			$this->_name = mysql_insert_id () . $this->_extension;
+		}
+		
+		// save into database
+		$query = "UPDATE uploads SET name = '" . $this->_name . "' WHERE id = '" . mysql_insert_id () . "'";
+		if ( !$sql->execute($query) ) {
+			$this->error = "Echec lors de l'enregistrement du nom de votre image, veuillez retenter.";
+			return false;
+		}
+		
+		// complete upload: move file to target dir
+		if (!move_uploaded_file($file["tmp_name"], ORIGINAL . $this->_name)) {
+			$this->error = "Echec de l'upload !";
+			return false;
+		}
 
-        // format tags
-        $this->_tags = $tags;
-        $this->_formatTags();
+		// build resized image
+		$this->_resize(RESIZE, $config['width'], $config['height']);
+		$this->_resize(THUMB, $config['width_thumb'], $config['height_thumb']);
 
-        // description
-        $this->_description = htmlspecialchars($description);
-
-        // access
-        $this->_public = !$private + 0;
-
-        // author
-        $this->_user = $_SESSION['pseudo'];
-
-        // save into database
-        $query = "INSERT INTO uploads (user, description, tags, public, name) VALUES ('" . $sql->escape($this->_user) . "', '" . $sql->escape($this->_description) . "', '" . $sql->escape($this->_tags) . "', " . $this->_public . ", '" . $this->_name . "')";
-        return $sql->execute($query) && $this->saveTags();
+		return  $this->saveTags();
     }
 
     public function edit($tags, $description, $private) {
