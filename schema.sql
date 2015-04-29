@@ -14,6 +14,7 @@ CREATE TABLE  `uploads` (
   `tags` text NOT NULL,
   `public` int(1) NOT NULL,
   `name` varchar(60) default NULL,
+  `password` varchar(30) default NULL,
   PRIMARY KEY  (`id`),
   KEY `id` (`id`)
 );
