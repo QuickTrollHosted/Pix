@@ -22,6 +22,7 @@ define('CLASSES', ROOT . 'classes/');
 define('INC', ROOT . 'inc/');
 
 $config = array(
+    'sql_type' => '', // mysql / postgresql. default is mysql
     'sql_host' => 'localhost',
     'sql_user' => 'root',
     'sql_password' => '',

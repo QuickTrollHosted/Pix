@@ -1,65 +1,63 @@
 <?php
+require_once CLASSES . "MySQLinterpreter.php";
+require_once CLASSES . "PSQLinterpreter.php";
 
 class SQL {
 
-    private $_db;
-    private $_result;
+    private $_interpreter;
+    private $_db_type;
 
     public function __construct() {
-        $this->_connect();
+        global $config;
+
+        $this->_db_type = $config['sql_type'];
+
+        switch($this->_db_type){
+            case "postgresql":
+                $this->_interpreter = new PSQLinterpreter();
+                break;
+
+            case "mysql":
+            default:
+                $this->_interpreter = new MySQLinterpreter();
+                break;
+        }
     }
 
     public function __destruct() {
-        if ($this->_result) {
-            $this->free();
-        }
-        $this->_disconnect();
+        $this->free();
     }
 
     public function execute($query) {
-        $this->_result = mysql_query($query);
-        return $this->_result;
+        return $this->_interpreter->execute($query);
     }
 
     public function next() {
-        return mysql_fetch_array($this->_result);
+        return $this->_interpreter->next();
     }
 
     public function count() {
-        return mysql_num_rows($this->_result);
+        return $this->_interpreter->count();
     }
 
     public function free() {
-        if ($this->_result) {
-            @mysql_free_result($this->_result);
-        }
+        $this->_interpreter->free();
     }
 
     public function escape($string) {
-        return mysql_escape_string($string);
-    }
-
-    private function _connect() {
-        global $config;
-
-        $this->_db = mysql_connect($config['sql_host'], $config['sql_user'], $config['sql_password']);
-        mysql_select_db($config['sql_database']);
-    }
-
-    private function _disconnect() {
-        mysql_close($this->_db);
+        return $this->_interpreter->escape($string);
     }
 
     public function begin_transaction() {
-        return mysql_query('BEGIN', $this->_db);
+        return $this->_interpreter->begin_transaction();
     }
 
     public function commit() {
-        return mysql_query('COMMIT', $this->_db);
+        return $this->_interpreter->commit();
     }
 
     public function rollback() {
-        return mysql_query('ROLLBACK', $this->_db);
+        return $this->_interpreter->rollback();
     }
 
 }
