@@ -49,11 +49,10 @@ a:hover {
 }
 
 #header h1 {
-    background: transparent url(../images/Logo-zcraft.png) no-repeat right top;
+    background: transparent url(../images/toile-libre.png) no-repeat right top;
     margin-top: -30px;
     padding-top: 112px;
     font-size: 0px;
-	margin-right: 100px;
 }
 
 #header h2 {
